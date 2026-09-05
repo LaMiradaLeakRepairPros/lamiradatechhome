@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Mirada Tech & Home | Advanced Hydro-Thermal Diagnostics & Residential Technology</title>
+    <meta name="description" content="A modern digital publication covering architectural technology, non-invasive infrared building diagnostics, and modern home engineering in La Mirada.">
+    
+    <!-- Google Fonts: Editorial Sans + Monospaced Tech Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* 
+           THEME: "AMBER THERMAL OCHRE & DEEP ELECTRIC COBALT"
+           Visual Identity:
+           - Base Background: Deep Charcoal Obsidian (#07090E)
+           - Primary Accent: Infrared Solar Gold/Amber (#FF9F1C)
+           - Secondary Accent: Thermal Thermal Blue/Cobalt (#2A6FDB)
+           - Accent Heat Red: Infrared Peak Red (#FF4500)
+           - Surface Dark: Midnight Slate (#0D111A)
+           - Surface Glass: Translucent Obsidian (#141B29)
+           - Text Light: Pure Arctic White (#F8FAFC)
+           - Text Dim: Cool Slate Grey (#94A3B8)
+           - Font Display: 'Syne', sans-serif
+           - Font Body: 'Space Grotesk', sans-serif
+           - Font Mono: 'JetBrains Mono', monospace
+        */
+
+        :root {
+            --bg-deep: #07090E;
+            --bg-surface: #0D111A;
+            --bg-glass: rgba(20, 27, 41, 0.75);
+            --bg-card: #141C2B;
+            --accent-amber: #FF9F1C;
+            --accent-cobalt: #2A6FDB;
+            --accent-heat: #FF4500;
+            --accent-cyan: #00F0FF;
+            --text-light: #F8FAFC;
+            --text-dim: #94A3B8;
+            --border-amber: rgba(255, 159, 28, 0.3);
+            --border-cobalt: rgba(42, 111, 219, 0.3);
+            --border-glass: rgba(248, 250, 252, 0.08);
+            --font-display: 'Syne', sans-serif;
+            --font-body: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+            background-color: var(--bg-deep);
+            color: var(--text-light);
+        }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.7;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 90% 10%, rgba(255, 159, 28, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 10% 60%, rgba(42, 111, 219, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, #07090E 0%, #030407 100%);
+            background-attachment: fixed;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            color: var(--text-light);
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+        }
+
+        .mono-tag {
+            font-family: var(--font-mono);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1360px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .section-padding {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        /* CUSTOM ASYMMETRIC SEPARATOR */
+        .thermal-line-divider {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--accent-amber) 25%, var(--accent-heat) 50%, var(--accent-cobalt) 75%, transparent 100%);
+            opacity: 0.4;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .thermal-line-divider::before {
+            content: '[ THERMAL PROFILE SCAN ]';
+            position: absolute;
+            top: -10px;
+            right: 10%;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--accent-amber);
+            background: var(--bg-deep);
+            padding: 0 10px;
+            letter-spacing: 2px;
+        }
+
+        /* BADGES & TAGS */
+        .tag-amber {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(255, 159, 28, 0.1);
+            border: 1px solid var(--border-amber);
+            color: var(--accent-amber);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .tag-cobalt {
+            background: rgba(42, 111, 219, 0.15);
+            border-color: var(--border-cobalt);
+            color: var(--accent-cyan);
+        }
+
+        /* BUTTON SYSTEM */
+        .btn-amber {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 36px;
+            background: linear-gradient(135deg, var(--accent-amber), var(--accent-heat));
+            color: #000000;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 159, 28, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .btn-amber:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 159, 28, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-cobalt-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 36px;
+            background: transparent;
+            color: var(--text-light);
+            font-family: var(--font-mono);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid var(--border-cobalt);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cobalt-outline:hover {
+            background: rgba(42, 111, 219, 0.2);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        /* 1. STICKY NAVBAR */
+        .header-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(7, 9, 14, 0.88);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .header-nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 90px;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand-symbol {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--accent-amber), var(--accent-cobalt));
+            border-radius: 6px;
+            display: grid;
+            place-items: center;
+            color: #000;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .brand-text-wrap h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .brand-text-wrap span {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--accent-amber);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: block;
+        }
+
+        .nav-links-menu {
+            display: flex;
+            gap: 36px;
+            list-style: none;
+        }
+
+        .nav-links-menu a {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+        }
+
+        .nav-links-menu a:hover {
+            color: var(--accent-amber);
+        }
+
+        /* 2. DYNAMIC HERO SECTION (ASYMMETRIC GRID) */
+        .hero-layout-grid {
+            padding-top: 170px;
+            padding-bottom: 80px;
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .hero-text-block {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            padding: 60px;
+            position: relative;
+            border-radius: 8px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-text-block::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 10%;
+            width: 30%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-amber), var(--accent-cyan));
+        }
+
+        .hero-main-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .hero-main-title span {
+            background: linear-gradient(135deg, var(--accent-amber), var(--accent-heat));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-lead-text {
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            margin-bottom: 36px;
+            max-width: 650px;
+            font-weight: 400;
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-amber);
+            box-shadow: 0 20px 50px rgba(255, 159, 28, 0.15);
+        }
+
+        .hero-image-wrapper img {
+            width: 100%;
+            height: 520px;
+            object-fit: cover;
+            display: block;
+            filter: saturate(1.2) contrast(1.1);
+        }
+
+        .hero-overlay-tag {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(7, 9, 14, 0.85);
+            border: 1px solid var(--border-amber);
+            padding: 10px 16px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent-amber);
+            backdrop-filter: blur(8px);
+            border-radius: 4px;
+        }
+
+        /* 3. QUICK STATS & ACHIEVEMENTS */
+        .stats-bar-section {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border-glass);
+            border-bottom: 1px solid var(--border-glass);
+            padding: 40px 0;
+        }
+
+        .stats-asymmetric-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .stat-card-item {
+            background: var(--bg-glass);
+            border-left: 3px solid var(--accent-amber);
+            padding: 20px 24px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .stat-number-display {
+            font-family: var(--font-mono);
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .stat-number-display span {
+            color: var(--accent-amber);
+            font-size: 1.8rem;
+        }
+
+        .stat-label-text {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: var(--font-mono);
+        }
+
+        /* 4. OVERVIEW / EDITORIAL MISSION */
+        .mission-dual-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .mission-card-feature {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            padding: 48px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .mission-card-feature::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, var(--accent-cobalt) 0%, transparent 70%);
+            opacity: 0.3;
+        }
+
+        /* 5. MAIN FEATURED ARTICLE SECTION */
+        .article-publication-frame {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-amber);
+            padding: 80px 70px;
+            max-width: 1100px;
+            margin: 0 auto;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 30px 90px rgba(0,0,0,0.7);
+        }
+
+        .article-publication-frame::before {
+            content: 'SPECIAL TECH PUBLICATION // HYDRO-THERMAL DIAGNOSTICS';
+            position: absolute;
+            top: -12px;
+            left: 50px;
+            background: var(--accent-amber);
+            color: #000;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 16px;
+            letter-spacing: 1.5px;
+            border-radius: 2px;
+        }
+
+        .article-header-meta {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .article-headline-text {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 36px;
+            color: var(--text-light);
+        }
+
+        .article-content-prose {
+            font-size: 1.1rem;
+            line-height: 1.85;
+            color: #CBD5E1;
+        }
+
+        .article-content-prose p {
+            margin-bottom: 28px;
+        }
+
+        .article-content-prose h3 {
+            font-size: 1.8rem;
+            margin: 48px 0 20px 0;
+            color: var(--text-light);
+            border-bottom: 1px solid var(--border-glass);
+            padding-bottom: 10px;
+        }
+
+        .article-quote-box {
+            background: rgba(255, 159, 28, 0.05);
+            border-left: 4px solid var(--accent-amber);
+            padding: 32px;
+            margin: 40px 0;
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--accent-amber);
+            line-height: 1.5;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .seo-link-primary {
+            color: var(--accent-amber);
+            font-weight: 700;
+            text-decoration: underline;
+            text-underline-offset: 6px;
+            transition: color 0.2s ease;
+        }
+
+        .seo-link-primary:hover {
+            color: var(--accent-cyan);
+        }
+
+        .authority-outbound {
+            color: var(--accent-cyan);
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        /* 6. CORE FEATURES GRID */
+        .features-hex-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .feature-card-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            padding: 40px 32px;
+            border-radius: 8px;
+            transition: all 0.35s ease;
+            position: relative;
+        }
+
+        .feature-card-item:hover {
+            border-color: var(--accent-cobalt);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(42, 111, 219, 0.15);
+        }
+
+        .feature-card-number {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--accent-amber);
+            margin-bottom: 16px;
+        }
+
+        /* 7. STEP-BY-STEP ARCHITECTURE GUIDE */
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .step-node-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glass);
+            padding: 32px 24px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .step-node-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--border-glass);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .step-node-card.highlight-node::before {
+            background: linear-gradient(90deg, var(--accent-amber), var(--accent-heat));
+        }
+
+        /* 8. COMPREHENSIVE COMPARISON TABLE */
+        .comparison-table-wrapper {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .matrix-table-custom {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .matrix-table-custom th {
+            background: var(--bg-card);
+            padding: 24px 28px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-amber);
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .matrix-table-custom td {
+            padding: 20px 28px;
+            border-bottom: 1px solid var(--border-glass);
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        .matrix-table-custom tr:hover td {
+            background: rgba(255, 159, 28, 0.02);
+            color: var(--text-light);
+        }
+
+        /* 9. FAQ ACCORDION */
+        .faq-container-width {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-item-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glass);
+            margin-bottom: 16px;
+            border-radius: 6px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-toggle-button {
+            width: 100%;
+            padding: 26px 32px;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .faq-icon-indicator {
+            font-family: var(--font-mono);
+            color: var(--accent-amber);
+            font-size: 1.3rem;
+        }
+
+        .faq-panel-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 0 32px;
+            color: var(--text-dim);
+            font-size: 0.98rem;
+        }
+
+        .faq-item-box.active-item {
+            border-color: var(--border-amber);
+            background: var(--bg-card);
+        }
+
+        .faq-item-box.active-item .faq-panel-content {
+            max-height: 250px;
+            padding-bottom: 28px;
+        }
+
+        /* 10. EXPERT TIPS */
+        .tips-tri-layout {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .tip-card-single {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glass);
+            padding: 36px 28px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .tip-card-tag {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--accent-cyan);
+        }
+
+        /* 11. TESTIMONIALS SHOWCASE */
+        .testimonials-grid-3col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .testimonial-card-item {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glass);
+            padding: 36px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .testimonial-body-text {
+            font-size: 0.98rem;
+            font-style: italic;
+            margin-bottom: 28px;
+            color: var(--text-light);
+        }
+
+        .testimonial-user-profile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .testimonial-user-profile img {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--accent-amber);
+        }
+
+        /* 12. HIGHLIGHTED RESOURCE BANNER */
+        .resource-banner-card {
+            background: linear-gradient(135deg, var(--bg-card), #1D283D);
+            border: 1px solid var(--border-amber);
+            padding: 70px 60px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        /* 13. CONSULTATION FORM SECTION */
+        .form-split-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .form-panel-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glass);
+            padding: 48px;
+            border-radius: 8px;
+        }
+
+        .form-input-group {
+            margin-bottom: 22px;
+        }
+
+        .form-input-group label {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-amber);
+            margin-bottom: 8px;
+        }
+
+        .form-input-control {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--bg-deep);
+            border: 1px solid var(--border-glass);
+            color: var(--text-light);
+            font-family: inherit;
+            font-size: 0.95rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input-control:focus {
+            outline: none;
+            border-color: var(--accent-amber);
+            box-shadow: 0 0 12px rgba(255, 159, 28, 0.2);
+        }
+
+        /* 14. COMPREHENSIVE FOOTER */
+        .footer-main {
+            background: #030407;
+            border-top: 1px solid var(--border-glass);
+            padding: 90px 0 40px 0;
+        }
+
+        .footer-columns-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 48px;
+            margin-bottom: 70px;
+        }
+
+        .footer-column-title {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-amber);
+            margin-bottom: 20px;
+        }
+
+        .footer-menu-links {
+            list-style: none;
+        }
+
+        .footer-menu-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-menu-links a {
+            color: var(--text-dim);
+            font-size: 0.88rem;
+        }
+
+        .footer-menu-links a:hover {
+            color: var(--accent-amber);
+        }
+
+        .footer-legal-bar {
+            border-top: 1px solid var(--border-glass);
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-dim);
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+        }
+
+        /* RESPONSIVE BREAKPOINTS */
+        @media (max-width: 1024px) {
+            .hero-layout-grid, .mission-dual-grid, .form-split-layout {
+                grid-template-columns: 1fr;
+            }
+            .features-hex-grid, .tips-tri-layout, .testimonials-grid-3col, .architecture-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .stats-asymmetric-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .footer-columns-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links-menu {
+                display: none;
+            }
+            .hero-main-title {
+                font-size: 2.5rem;
+            }
+            .article-publication-frame {
+                padding: 40px 24px;
+            }
+            .article-headline-text {
+                font-size: 2rem;
+            }
+            .features-hex-grid, .tips-tri-layout, .testimonials-grid-3col, .stats-asymmetric-grid, .footer-columns-grid, .architecture-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-legal-bar {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. MODERN STICKY NAVIGATION BAR -->
+    <header class="header-nav">
+        <div class="container">
+            <div class="header-nav-container">
+                <a href="#" class="brand-logo">
+                    <div class="brand-symbol">T</div>
+                    <div class="brand-text-wrap">
+                        <h2>LA MIRADA TECH &amp; HOME</h2>
+                        <span>Hydro-Thermal Journal</span>
+                    </div>
+                </a>
+                <ul class="nav-links-menu">
+                    <li><a href="#mission">Overview</a></li>
+                    <li><a href="#article">Featured Journal</a></li>
+                    <li><a href="#tech">Thermal Specs</a></li>
+                    <li><a href="#guide">Workflow</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+                <a href="#consult" class="btn-amber" style="padding: 12px 20px; font-size: 0.75rem;">Request Scan</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. DYNAMIC HERO SECTION -->
+    <section class="section-padding" style="padding-top: 130px;">
+        <div class="container">
+            <div class="hero-layout-grid">
+                <div class="hero-text-block">
+                    <div class="tag-amber">Thermal Infrared Intelligence</div>
+                    <h1 class="hero-main-title">Concealed Leak <span>Thermal Imaging</span></h1>
+                    <p class="hero-lead-text">Exploring non-destructive infrared diagnostics for subterranean slab pipes, chase walls, and hidden plumbing breaches across La Mirada residential properties.</p>
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                        <a href="#article" class="btn-amber">Read Main Article</a>
+                        <a href="#tech" class="btn-cobalt-outline">View Thermal Specs</a>
+                    </div>
+                </div>
+                <div>
+                    <div class="hero-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=1000&q=80" alt="Thermal Imaging Leak Inspection Equipment">
+                        <div class="hero-overlay-tag">FLIR Thermal Sensor Active</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="thermal-line-divider"></div>
+
+    <!-- 3. QUICK STATS & ACHIEVEMENTS GRID -->
+    <div class="stats-bar-section">
+        <div class="container">
+            <div class="stats-asymmetric-grid">
+                <div class="stat-card-item">
+                    <div class="stat-number-display">0.1<span>°C</span></div>
+                    <div class="stat-label-text">Thermal Sensitivity Delta</div>
+                </div>
+                <div class="stat-card-item">
+                    <div class="stat-number-display">100<span>%</span></div>
+                    <div class="stat-label-text">Non-Destructive Scanning</div>
+                </div>
+                <div class="stat-card-item">
+                    <div class="stat-number-display">&lt;15<span>m</span></div>
+                    <div class="stat-label-text">Rapid Plume Identification</div>
+                </div>
+                <div class="stat-card-item">
+                    <div class="stat-number-display">0<span>mm</span></div>
+                    <div class="stat-label-text">Demolition During Audit</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. PLATFORM OVERVIEW / EDITORIAL MISSION -->
+    <section class="section-padding" id="mission">
+        <div class="container">
+            <div class="mission-dual-grid">
+                <div>
+                    <div class="tag-amber">Journal Objective</div>
+                    <h2 style="font-size: 2.6rem; margin-bottom: 20px;">Advancing Non-Invasive <span>Building Science</span></h2>
+                    <p style="color: var(--text-dim); font-size: 1.05rem;">La Mirada Tech &amp; Home is a standalone digital publication delivering cutting-edge engineering insights for local property maintenance. We analyze how high-resolution thermography and acoustic tracking protect residential architecture from concealed moisture degradation.</p>
+                </div>
+                <div class="mission-card-feature">
+                    <h3 style="font-size: 1.25rem; margin-bottom: 16px; color: var(--accent-amber);">Preserving Structural Integrity</h3>
+                    <p style="color: var(--text-dim); font-size: 0.95rem;">Traditional plumbing diagnostics often relied on guesswork, leading to unnecessary wall demolition and slab jackhammering. Modern infrared thermography captures thermal gradients through concrete, plaster, and tile, allowing localized precision repairs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="thermal-line-divider"></div>
+
+    <!-- 5. MAIN FEATURED ARTICLE SECTION -->
+    <section class="section-padding" id="article">
+        <div class="container">
+            <article class="article-publication-frame">
+                <span class="article-header-meta">RESEARCH REPORT // LA MIRADA RESIDENTIAL HYDRO-DIAGNOSTICS</span>
+                
+                <h1 class="article-headline-text">Using Thermal Diagnostics for Concealed Wall and Floor Leaks in La Mirada</h1>
+
+                <div class="article-content-prose">
+                    <p>Locating hot water line breaches behind dense plaster or beneath tiled floors historically required destructive wall opening and slab trenching. In established Southern California neighborhoods like La Mirada, mid-century homes and modern architectural residences alike utilize subterranean concrete slab foundations and multi-layer wall assemblies. When a hot water supply line develops a pinhole leak or fitting fracture within these concealed enclosures, water migrates quietly along structural framing, causing extensive sub-surface saturation long before damp spots appear on interior drywall or hardwood flooring.</p>
+
+                    <p>Infrared thermal cameras detect subtle surface temperature variations, revealing hot water migration patterns through building materials in real time. Rather than searching blindly through physical demolition, building diagnostic specialists utilize high-sensitivity thermographic cameras that convert radiative heat energy into detailed visual heat maps. Warm water escaping from a pressurized supply line radiates heat outward, warming the surrounding slab, subfloor, or plaster wall. The thermal imaging camera records these subtle millidegree temperature anomalies, displaying distinct radiant thermal signatures that delineate the precise origin and dispersion path of the leak.</p>
+
+                    <div class="article-quote-box">
+                        "Infrared thermography converts invisible radiant heat differentials into pinpoint visual vectors, eliminating destructive exploratory demolition across concrete slabs and plaster walls."
+                    </div>
+
+                    <h3>Minimizing Structural Demolition Through Precision Optics</h3>
+                    <p>Deploying thermal imaging dramatically reduces diagnostic repair times while keeping structural demolition to an absolute minimum. Traditional exploratory plumbing methods frequently required cutting wide trenches across decorated tile floors or tearing open several feet of interior drywall just to locate a single leaking elbow. By mapping the exact thermal footprint of escaping water, technicians can isolate the breach down to a localized target area of just a few square inches, allowing for surgical access cuts and drastically lowering restoration costs.</p>
+
+                    <p>Property owners seeking non-invasive moisture diagnostics can utilize <a href="https://lamiradaleakrepairpros.com/services/thermal-imaging-leak-detection-repair" class="seo-link-primary" target="_blank" rel="noopener">thermal imaging leak detection La Mirada</a> to locate active leaks. Implementing advanced infrared inspection ensures that hidden pipe ruptures are accurately mapped without disrupting the surrounding living space or compromising load-bearing wall elements.</p>
+
+                    <h3>Fast, Non-Invasive Property Assessments</h3>
+                    <p>Infrared technology delivers fast, accurate property assessments without damaging interior living spaces. Thermal imaging scans are completely non-contact, quiet, and rapid, allowing entire residential floor plans to be evaluated in a single session. In addition to pinpointing active pipe ruptures, thermographic cameras identify lingering moisture pockets within wall cavities, preventing secondary structural hazards such as hidden mold growth, timber rot, and sub-slab erosion.</p>
+
+                    <p>Property owners conducting comprehensive home technology audits can verify municipal guidelines through the official <a href="https://www.cityoflamirada.org/" class="authority-outbound" target="_blank" rel="noopener">City of La Mirada Municipal Portal</a>. For additional research on non-destructive testing methodologies and thermal sensor standards, reference resources supplied by the <a href="https://www.asnt.org/" class="authority-outbound" target="_blank" rel="noopener">American Society for Nondestructive Testing</a>.</p>
+
+                    <p>By leveraging thermal diagnostics at the first sign of unexplainable water bill spikes, warm floor patches, or ticking water meter dials, La Mirada homeowners can protect both their architectural assets and financial investments.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <div class="thermal-line-divider"></div>
+
+    <!-- 6. CORE FEATURES & KEY VALUE GRID -->
+    <section class="section-padding" id="tech">
+        <div class="container">
+            <div style="margin-bottom: 50px;">
+                <div class="tag-amber">Technical Specs</div>
+                <h2 style="font-size: 2.6rem;">6 Key Advantages of <span>Thermal Diagnostics</span></h2>
+            </div>
+
+            <div class="features-hex-grid">
+                <div class="feature-card-item">
+                    <div class="feature-card-number">FEATURE // 01</div>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 12px;">Real-Time Heat Mapping</h3>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">Instantly visualizes radiant heat profiles escaping through tile, concrete slabs, and heavy plaster walls.</p>
+                </div>
+                <div class="feature-card-item">
+                    <div class="feature-card-number">FEATURE // 02</div>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 12px;">Sub-Slab Penetration</h3>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">Detects thermal plumes originating up to several inches beneath subterranean concrete foundations.</p>
+                </div>
+                <div class="feature-card-item">
+                    <div class="feature-card-number">FEATURE // 03</div>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 12px;">Zero Wall Destruction</h3>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">Eliminates the need for exploratory wall cutting or destructive floor trenching during the diagnostic phase.</p>
+                </div>
+                <div class="feature-card-item">
+                    <div class="feature-card-number">FEATURE // 04</div>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 12px;">Moisture Boundary Tracking</h3>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">Outlines the full spread of dampness within drywall enclosures to prevent hidden fungal proliferation.</p>
+                </div>
+                <div class="feature-card-item">
+                    <div class="feature-card-number">FEATURE // 05</div>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 12px;">Rapid Scanning Protocol</h3>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">Full multi-room residential thermal scans completed efficiently within a single hour.</p>
+                </div>
+                <div class="feature-card-item">
+                    <div class="feature-card-number">FEATURE // 06</div>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 12px;">Digital Evidence Reports</h3>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">Generates high-resolution radiometric image reports suitable for insurance verification.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. VISUAL BREAKDOWN / ARCHITECTURE GUIDE -->
+    <section class="section-padding" id="guide" style="background: rgba(13, 17, 26, 0.5);">
+        <div class="container">
+            <div style="margin-bottom: 50px; text-align: center;">
+                <div class="tag-amber">Diagnostic Workflow</div>
+                <h2 style="font-size: 2.6rem;">4-Step <span>Hydro-Thermal Protocol</span></h2>
+            </div>
+
+            <div class="architecture-grid">
+                <div class="step-node-card highlight-node">
+                    <div class="mono-tag" style="color: var(--accent-amber); font-size: 0.75rem; margin-bottom: 10px;">PHASE 01</div>
+                    <h4 style="font-size: 1.1rem; margin-bottom: 10px;">System Pressurization</h4>
+                    <p style="color: var(--text-dim); font-size: 0.88rem;">Hot water supply circuits are stabilized to establish maximum thermal contrast across building surfaces.</p>
+                </div>
+                <div class="step-node-card">
+                    <div class="mono-tag" style="color: var(--accent-amber); font-size: 0.75rem; margin-bottom: 10px;">PHASE 02</div>
+                    <h4 style="font-size: 1.1rem; margin-bottom: 10px;">Infrared Sweep</h4>
+                    <p style="color: var(--text-dim); font-size: 0.88rem;">High-sensitivity thermal sensors scan walls, baseboards, and floor slabs to detect thermal anomalies.</p>
+                </div>
+                <div class="step-node-card">
+                    <div class="mono-tag" style="color: var(--accent-amber); font-size: 0.75rem; margin-bottom: 10px;">PHASE 03</div>
+                    <h4 style="font-size: 1.1rem; margin-bottom: 10px;">Acoustic Cross-Verification</h4>
+                    <p style="color: var(--text-dim); font-size: 0.88rem;">Ultrasonic frequency detectors verify the exact leak sound signature at the thermal peak.</p>
+                </div>
+                <div class="step-node-card">
+                    <div class="mono-tag" style="color: var(--accent-amber); font-size: 0.75rem; margin-bottom: 10px;">PHASE 04</div>
+                    <h4 style="font-size: 1.1rem; margin-bottom: 10px;">Surgical Access</h4>
+                    <p style="color: var(--text-dim); font-size: 0.88rem;">Technicians open a precise access hole directly over the breach for localized pipe repair.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. COMPREHENSIVE COMPARISON TABLE -->
+    <section class="section-padding">
+        <div class="container">
+            <div style="margin-bottom: 40px;">
+                <div class="tag-amber">Method Matrix</div>
+                <h2 style="font-size: 2.6rem;">Thermal Imaging vs. <span>Traditional Inspection</span></h2>
+            </div>
+
+            <div class="comparison-table-wrapper">
+                <table class="matrix-table-custom">
+                    <thead>
+                        <tr>
+                            <th>Diagnostic Metric</th>
+                            <th>Traditional Exploratory Demolition</th>
+                            <th>Thermal Infrared Diagnostics</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Structural Wall/Floor Impact</strong></td>
+                            <td>High (Multiple exploratory openings)</td>
+                            <td><span style="color: var(--accent-amber); font-weight: 700;">Zero (100% Non-Invasive)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Diagnostic Precision Area</strong></td>
+                            <td>Broad / Approximate (3-6 foot radius)</td>
+                            <td><span style="color: var(--accent-amber); font-weight: 700;">Exact (Within 1-2 inches)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Time Required for Assessment</strong></td>
+                            <td>3 to 6 Hours (Demo + Search)</td>
+                            <td><span style="color: var(--accent-amber); font-weight: 700;">30 to 60 Minutes</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hidden Moisture Detection</strong></td>
+                            <td>Limited to visual damp spots</td>
+                            <td><span style="color: var(--accent-amber); font-weight: 700;">Complete thermal dampness mapping</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. INTERACTIVE FAQ SECTION -->
+    <section class="section-padding" id="faq" style="background: rgba(13, 17, 26, 0.4);">
+        <div class="container">
+            <div style="margin-bottom: 50px; text-align: center;">
+                <div class="tag-amber">Homeowner Guidance</div>
+                <h2 style="font-size: 2.6rem;">Frequently Asked <span>Questions</span></h2>
+            </div>
+
+            <div class="faq-container-width">
+                <div class="faq-item-box">
+                    <button class="faq-toggle-button">
+                        <span>Can thermal imaging detect cold water line leaks as well?</span>
+                        <span class="faq-icon-indicator">+</span>
+                    </button>
+                    <div class="faq-panel-content">
+                        <p>Yes. While hot water leaks display bright warm plumes, cold water leaks create subtle cool temperature drops (thermal sinks) as moisture absorbs ambient heat from surrounding building materials.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item-box">
+                    <button class="faq-toggle-button">
+                        <span>Does thermal imaging see directly through concrete slab foundations?</span>
+                        <span class="faq-icon-indicator">+</span>
+                    </button>
+                    <div class="faq-panel-content">
+                        <p>Thermal cameras detect radiative heat that travels to the surface of the slab. Escaping hot water warms the concrete directly above it, creating a distinct visual heat signature on the floor surface.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item-box">
+                    <button class="faq-toggle-button">
+                        <span>How accurate is thermal leak isolation?</span>
+                        <span class="faq-icon-indicator">+</span>
+                    </button>
+                    <div class="faq-panel-content">
+                        <p>When combined with acoustic verification, infrared thermography isolates active supply line breaches within a localized radius of 1 to 2 inches.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item-box">
+                    <button class="faq-toggle-button">
+                        <span>Are thermal camera scans safe for interior environments?</span>
+                        <span class="faq-icon-indicator">+</span>
+                    </button>
+                    <div class="faq-panel-content">
+                        <p>Completely safe. Infrared thermography is a passive diagnostic technology that emits no radiation, sound, or physical contact of any kind.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. EXPERT TIPS CARDS -->
+    <section class="section-padding">
+        <div class="container">
+            <div style="margin-bottom: 40px;">
+                <div class="tag-amber">Best Practices</div>
+                <h2 style="font-size: 2.6rem;">3 Signs You Need a <span>Thermal Scan</span></h2>
+            </div>
+
+            <div class="tips-tri-layout">
+                <div class="tip-card-single">
+                    <div class="tip-card-tag">INDICATOR // 01</div>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 10px; color: var(--accent-amber);">Unexplained Warm Floor Spots</h3>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">Noticeable warm areas under tile or vinyl flooring frequently signal a subterranean hot water slab leak.</p>
+                </div>
+                <div class="tip-card-single">
+                    <div class="tip-card-tag">INDICATOR // 02</div>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 10px; color: var(--accent-amber);">Unusual Water Meter Motion</h3>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">If the main water meter continues ticking when all interior valves are closed, a concealed leak is active.</p>
+                </div>
+                <div class="tip-card-single">
+                    <div class="tip-card-tag">INDICATOR // 03</div>
+                    <h3 style="font-size: 1.2rem; margin-bottom: 10px; color: var(--accent-amber);">Spiking Utility Bills</h3>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">Sudden increases in gas or electric heating bills often indicate continuous hot water loss behind walls.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 11. TESTIMONIALS SHOWCASE -->
+    <section class="section-padding" style="background: rgba(13, 17, 26, 0.3);">
+        <div class="container">
+            <div style="margin-bottom: 40px;">
+                <div class="tag-amber">Local Feedback</div>
+                <h2 style="font-size: 2.6rem;">What La Mirada Residents <span>Report</span></h2>
+            </div>
+
+            <div class="testimonials-grid-3col">
+                <div class="testimonial-card-item">
+                    <p class="testimonial-body-text">"We felt a warm spot under our hallway tile but didn't want our floors smashed up. The thermal camera pinpointed the slab leak precisely without unnecessary digging."</p>
+                    <div class="testimonial-user-profile">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" alt="La Mirada Resident">
+                        <div>
+                            <h4 style="font-size: 0.95rem; font-family: var(--font-body); font-weight: 600;">David Krasner</h4>
+                            <span style="font-size: 0.75rem; color: var(--text-dim);">Foster Park Area</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card-item">
+                    <p class="testimonial-body-text">"The thermal imaging scan revealed moisture spreading inside our bathroom drywall before mold could start. A fast, non-invasive assessment that saved thousands."</p>
+                    <div class="testimonial-user-profile">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80" alt="La Mirada Resident">
+                        <div>
+                            <h4 style="font-size: 0.95rem; font-family: var(--font-body); font-weight: 600;">Elena Rostova</h4>
+                            <span style="font-size: 0.75rem; color: var(--text-dim);">Green Hills Neighborhood</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card-item">
+                    <p class="testimonial-body-text">"As a property manager in La Mirada, having non-destructive thermal reports gives us instant clarity and proof for insurance claims. Highly recommended."</p>
+                    <div class="testimonial-user-profile">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80" alt="La Mirada Resident">
+                        <div>
+                            <h4 style="font-size: 0.95rem; font-family: var(--font-body); font-weight: 600;">Brian Vance</h4>
+                            <span style="font-size: 0.75rem; color: var(--text-dim);">Imperial Hwy Sector</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 12. HIGHLIGHTED RESOURCE BANNER -->
+    <div class="container" style="margin-bottom: 100px;">
+        <div class="resource-banner-card">
+            <h2 style="font-size: 2.4rem; margin-bottom: 16px;">Schedule an Infrared Thermal Assessment</h2>
+            <p style="color: var(--text-dim); max-width: 650px; margin: 0 auto 28px auto; font-size: 1rem;">Locate active hot water leaks behind plaster or beneath slab foundations using non-invasive thermal diagnostics.</p>
+            <a href="#consult" class="btn-amber">Book Property Inspection</a>
+        </div>
+    </div>
+
+    <!-- 13. CONSULTATION FORM SECTION -->
+    <section class="section-padding" id="consult" style="background: rgba(13, 17, 26, 0.5);">
+        <div class="container">
+            <div class="form-split-layout">
+                <div>
+                    <div class="tag-amber">Diagnostic Consultation</div>
+                    <h2 style="font-size: 2.6rem; margin-bottom: 16px;">Request a Thermal <span>Scan Audit</span></h2>
+                    <p style="color: var(--text-dim); margin-bottom: 28px;">Connect with certified infrared thermographers operating in La Mirada and surrounding sectors.</p>
+                    
+                    <div style="margin-bottom: 16px;">
+                        <strong class="mono-tag" style="color: var(--accent-amber); display: block; font-size: 0.8rem;">INQUIRIES EMAIL:</strong>
+                        <span style="color: var(--text-dim);">desk@lamiradatechhome.com</span>
+                    </div>
+                    <div>
+                        <strong class="mono-tag" style="color: var(--accent-amber); display: block; font-size: 0.8rem;">COVERAGE AREA:</strong>
+                        <span style="color: var(--text-dim);">La Mirada, CA &amp; Surrounding Residential Zones</span>
+                    </div>
+                </div>
+
+                <div class="form-panel-box">
+                    <form onsubmit="event.preventDefault(); alert('Thermal inspection request submitted successfully.');">
+                        <h3 style="font-size: 1.2rem; margin-bottom: 20px; font-family: var(--font-body);">Property Audit Request</h3>
+                        <div class="form-input-group">
+                            <label for="fname">Full Name</label>
+                            <input type="text" id="fname" class="form-input-control" placeholder="e.g. Robert Miller" required>
+                        </div>
+                        <div class="form-input-group">
+                            <label for="femail">Email Address</label>
+                            <input type="email" id="femail" class="form-input-control" placeholder="e.g. robert@example.com" required>
+                        </div>
+                        <div class="form-input-group">
+                            <label for="fissue">Suspected Property Issue</label>
+                            <select id="fissue" class="form-input-control">
+                                <option>Warm Spot on Tile / Concrete Slab</option>
+                                <option>Damp Spot on Drywall or Baseboard</option>
+                                <option>Unexplained Water Meter Movement</option>
+                                <option>General Preventive Thermal Audit</option>
+                            </select>
+                        </div>
+                        <div class="form-input-group">
+                            <label for="fnotes">Inspection Notes</label>
+                            <textarea id="fnotes" class="form-input-control" style="min-height: 80px; resize: vertical;" placeholder="Describe symptoms or home age..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-amber" style="width: 100%; justify-content: center;">Submit Inspection Request</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 14. COMPREHENSIVE FOOTER -->
+    <footer class="footer-main">
+        <div class="container">
+            <div class="footer-columns-grid">
+                <div>
+                    <h3 style="color: var(--text-light); font-size: 1.1rem; margin-bottom: 16px;">LA MIRADA TECH &amp; HOME</h3>
+                    <p style="color: var(--text-dim); font-size: 0.85rem; line-height: 1.6;">An independent Web 2.0 publication dedicated to modern architectural technologies, non-destructive thermography, and advanced residential building diagnostics in La Mirada, California.</p>
+                </div>
+                <div>
+                    <div class="footer-column-title">NAVIGATION</div>
+                    <ul class="footer-menu-links">
+                        <li><a href="#mission">Overview</a></li>
+                        <li><a href="#article">Featured Journal</a></li>
+                        <li><a href="#tech">Thermal Specs</a></li>
+                        <li><a href="#guide">Workflow</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="footer-heading footer-column-title">RESEARCH AREAS</div>
+                    <ul class="footer-menu-links">
+                        <li><a href="#article">Infrared Thermography</a></li>
+                        <li><a href="#guide">Sub-Slab Diagnostics</a></li>
+                        <li><a href="#guide">Acoustic Cross-Verification</a></li>
+                        <li><a href="#faq">Non-Destructive Testing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="footer-heading footer-column-title">LOCAL COVERAGE</div>
+                    <ul class="footer-menu-links">
+                        <li><a href="#">Foster Park Sector</a></li>
+                        <li><a href="#">Green Hills Corridor</a></li>
+                        <li><a href="#">Imperial Highway District</a></li>
+                        <li><a href="#">Creek Park Adjacent</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-legal-bar">
+                <div>&copy; 2026 La Mirada Tech &amp; Home. All Rights Reserved. Digital Publishing Identifier #9082-TH.</div>
+                <div style="display: flex; gap: 20px;">
+                    <a href="#" style="color: var(--text-dim);">Editorial Policy</a>
+                    <a href="#" style="color: var(--text-dim);">Privacy Architecture</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MINIMAL VANILLA JS FOR ACCORDION INTERACTION -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // FAQ Accordion Toggle
+            const faqBoxes = document.querySelectorAll('.faq-item-box');
+            faqBoxes.forEach(box => {
+                const btn = box.querySelector('.faq-toggle-button');
+                btn.addEventListener('click', () => {
+                    const isOpen = box.classList.contains('active-item');
+                    faqBoxes.forEach(b => b.classList.remove('active-item'));
+                    if (!isOpen) {
+                        box.classList.add('active-item');
+                    }
+                });
+            });
+
+            // Sticky Navbar Hide/Show on Scroll
+            let lastScroll = window.pageYOffset;
+            const header = document.querySelector('.header-nav');
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                if (currentScroll > lastScroll && currentScroll > 100) {
+                    header.style.transform = 'translateY(-100%)';
+                } else {
+                    header.style.transform = 'translateY(0)';
+                }
+                lastScroll = currentScroll;
+            });
+        });
+    </script>
+</body>
+</html>
